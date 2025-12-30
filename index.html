@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Christmas 2026 - Nada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #7928ca; 
+            --secondary: #ff0080; 
+            --gold: #ffd700;
+            --xmas-red: #d42426;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a0033 0%, #050010 100%);
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
+            font-family: 'Cairo', sans-serif; overflow: hidden; perspective: 1500px;
+            touch-action: manipulation;
+        }
+
+        #snow-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
+
+        .lights { position: absolute; top: 0; width: 100%; display: flex; justify-content: space-around; z-index: 10; padding: 15px 0; }
+        .light { width: 14px; height: 14px; border-radius: 50%; animation: blink 0.8s infinite alternate; }
+        @keyframes blink { 0% { opacity: 0.3; transform: scale(0.8); box-shadow: 0 0 5px currentColor; } 100% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 25px currentColor; } }
+
+        .container { position: relative; width: 92%; max-width: 400px; height: 680px; z-index: 5; transform-style: preserve-3d; }
+
+        .card {
+            position: absolute; width: 100%; height: 100%; 
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px);
+            border-radius: 45px; padding: 25px 20px; text-align: center;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.7), inset 0 0 15px rgba(255,255,255,0.8);
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; pointer-events: none;
+            transform: translateZ(-500px) rotateY(90deg) scale(0.5);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box; visibility: hidden;
+            transform-style: preserve-3d;
+            border: 1px solid rgba(255,255,255,1);
+        }
+
+        .active-card { 
+            opacity: 1 !important; pointer-events: auto !important; 
+            transform: translateZ(0) rotateY(0deg) scale(1) !important; 
+            visibility: visible; z-index: 5;
+            animation: floatCard 4s infinite ease-in-out;
+        }
+
+        .exit-card { opacity: 0 !important; transform: translateZ(500px) rotateY(-90deg) scale(1.2) !important; }
+
+        @keyframes floatCard {
+            0%, 100% { transform: perspective(1500px) rotateY(-2deg) rotateX(2deg); }
+            50% { transform: perspective(1500px) rotateY(2deg) rotateX(-2deg) translateY(-10px); }
+        }
+
+        .pro-emoji { 
+            font-size: 4rem; display: inline-block;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));
+            animation: live3DEmoji 3s infinite ease-in-out;
+            transform-style: preserve-3d;
+        }
+        @keyframes live3DEmoji {
+            0%, 100% { transform: translateZ(60px) rotate(0deg) scale(1); }
+            50% { transform: translateZ(110px) rotate(-10deg) translateY(-10px) scale(1.15); }
+        }
+
+        .heart-emoji {
+            font-size: 4.5rem; color: #ff0000; display: inline-block;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+            animation: pulseHeart 1.5s infinite alternate;
+            transform: translateZ(50px);
+        }
+        @keyframes pulseHeart { from { transform: translateZ(50px) scale(1); } to { transform: translateZ(100px) scale(1.2); } }
+
+        .video-glow-frame {
+            width: 100%; height: 210px; border-radius: 25px; padding: 5px;
+            background: linear-gradient(45deg, #7928ca, #ff0080, #ffd700, #7928ca);
+            background-size: 400% 400%;
+            animation: gradientMove 3s infinite linear;
+            box-shadow: 0 0 25px rgba(255, 0, 128, 0.4);
+            margin-bottom: 10px; transform: translateZ(30px);
+            overflow: hidden;
+        }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .video-wrapper { width: 100%; height: 100%; border-radius: 20px; overflow: hidden; background: #000; position: relative; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+
+        .photo-glow-frame {
+            width: 100%; height: 280px; border-radius: 30px; padding: 6px;
+            background: linear-gradient(135deg, #fff, #ff0080, #7928ca, #fff);
+            background-size: 200% 200%;
+            animation: gradientMove 4s infinite alternate;
+            box-shadow: 0 15px 35px rgba(121, 40, 202, 0.3);
+            margin-bottom: 10px; transform: translateZ(40px);
+        }
+
+        input {
+            width: 100%; height: 55px; border-radius: 20px; border: 2px solid #eee;
+            margin: 10px 0; text-align: center; font-size: 1.1rem;
+            transform: translateZ(30px); transition: 0.3s; background: #fdfdfd; 
+            font-family: 'Cairo', sans-serif;
+        }
+        input:focus { transform: translateZ(50px) scale(1.02); border-color: var(--secondary); }
+
+        .unlock-btn { 
+            width: 100%; min-height: 60px; border-radius: 22px; border: none; 
+            background: linear-gradient(45deg, var(--primary), var(--secondary)); 
+            color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(121, 40, 202, 0.3);
+            transform: translateZ(60px); transition: 0.4s;
+        }
+
+        .nada-name { 
+            font-family: 'Pacifico', cursive; font-size: 5rem; 
+            background: linear-gradient(to bottom, #ffd700, #ff8c00);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: pulseName 2s infinite alternate;
+        }
+
+        .heart-float { position: absolute; bottom: -10%; z-index: 100; animation: flyUp 3s forwards linear; pointer-events: none; }
+        @keyframes flyUp { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(-1000px) rotate(360deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="snow-canvas"></canvas>
+    <div class="lights" id="top-lights"></div>
+
+    <div class="container">
+        <div id="step1" class="card active-card">
+            <div style="background:var(--xmas-red); color:white; padding:8px 30px; border-radius:50px; font-weight:bold; transform:translateZ(40px)">2026</div>
+            <span class="pro-emoji">🎄</span>
+            <h1 style="font-family:'Amiri'; color:var(--xmas-red); margin:0; font-size:2.8rem; transform:translateZ(50px)">Christmas</h1>
+            <p style="transform:translateZ(30px)">جاهزة للمفاجأة يا ندى؟ ✨</p>
+            <input type="text" id="passCode" placeholder="يلا مفيش وقت ❤️🙈">
+            <button class="unlock-btn" onclick="checkPassword()">ادخلي عالمك الخاص يروحي ✨</button>
+            <div style="font-size:1.5rem; margin-top:15px; letter-spacing:12px; transform:translateZ(30px)">🎁💖🎅💝</div>
+        </div>
+
+        <div id="step2" class="card">
+            <div class="video-glow-frame"><div class="video-wrapper" id="videoContainer"></div></div>
+            <span class="pro-emoji" style="font-size:1.8rem; margin:0;">💌</span>
+            <div style="background:rgba(0,0,0,0.05); padding:15px; border-radius:20px; font-size:0.95rem; line-height:1.6; overflow-y:auto; max-height:180px; transform:translateZ(20px); text-align:right;">
+                <p>اخر دقيقه ف السنه لقيت نفسي عايز اكتبلك اي حاجه نختم بيها السنه وبجد بكتب الكلام دلوقتي من غير تفكير او ترتيب يمكن عشان الحاجات ال بتيجي من القلب مبتحتاجش ترتيب 😂😂 <br><br>
+                أنا بجد نفسي نفضل مع بعض العمر كله، ونكبر سوا، ونحقق كل أحلامنا وإإحنا ساندين بعض. كل سنة وإنتي سر ضحكتي، وكل سنة وإنتي الحب الحقيقي اللي ملوش نهاية. <br><br>
+                يا رب تكون 2026 سنة عوض وخير عليكي، وتكوني فيها دايماً مبسوطة ومرتاحة، وتفضلي منورة دنيتي بجمالك وطيبة قلبك اللي مفيش زيها. كل سنة وإحنا مع بعض يا حبيبتي، ومفيش أي حاجة في الدنيا تقدر تفرقنا عن بعض أبداً.. بحبك أوي. 💖👸</p>
+            </div>
+            <button class="unlock-btn" onclick="nextStep(2, 3)">شوفي اللي بعده 🤭</button>
+        </div>
+
+        <div id="step3" class="card">
+            <span class="heart-emoji">❤️😍</span>
+            <div class="photo-glow-frame">
+                <img src="https://i.postimg.cc/G3gBNk5H/6615031b4a8e45eeaeaf146f0cdb9385.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:25px;">
+            </div>
+            <div style="width:100%; background:#fff; padding:12px; border-radius:25px; box-shadow:0 10px 20px rgba(0,0,0,0.05); transform:translateZ(40px)">
+                <audio id="bgMusic"><source src="https://pomf2.lain.la/f/g722px1h.mp3" type="audio/mpeg"></audio>
+                <div style="display:flex; justify-content:center; gap:25px; align-items:center;">
+                    <button style="background:none; border:none; font-size:1.6rem; cursor:pointer;" onclick="skip(-10)">⏪</button>
+                    <button style="background:none; border:none; font-size:1.8rem; cursor:pointer;" id="playPauseBtn" onclick="togglePlay()">⏸️</button>
+                    <button style="background:none; border:none; font-size:1.6rem; cursor:pointer;" onclick="skip(10)">⏩</button>
+                </div>
+            </div>
+            <button class="unlock-btn" onclick="nextStep(3, 4)" style="margin-top:auto;">آخر مفاجأة 👑</button>
+        </div>
+
+        <div id="step4" class="card" style="justify-content:center;">
+            <h1 class="nada-name">Nada</h1>
+            <div class="pro-emoji">👸</div>
+            <p style="font-weight:bold; color:#d42426; font-size:1.6rem; transform:translateZ(40px)">أحلى ندى في الدنيا</p>
+            <button class="unlock-btn" style="background:#222; width:80%; margin-top:30px;" onclick="location.reload()">إعادة اللحظة 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+
+        function togglePlay() {
+            if (audio.paused) { audio.play(); playPauseBtn.innerText = "⏸️"; }
+            else { audio.pause(); playPauseBtn.innerText = "▶️"; }
+        }
+        function skip(s) { audio.currentTime += s; }
+
+        function nextStep(c, n) {
+            document.getElementById('step' + c).classList.add('exit-card');
+            if(c === 2) document.getElementById('videoContainer').innerHTML = "";
+            setTimeout(() => {
+                document.getElementById('step' + c).classList.remove('active-card', 'exit-card');
+                document.getElementById('step' + n).classList.add('active-card');
+                if(n === 2) document.getElementById('videoContainer').innerHTML = `<iframe src="https://streamable.com/e/fdg53p?autoplay=1" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+                if(n === 3) audio.play().catch(() => document.addEventListener('click', () => audio.play(), {once:true}));
+                if(n === 4) { audio.pause(); startCelebration(); }
+            }, 800);
+        }
+
+        function checkPassword() {
+            if(document.getElementById('passCode').value === "13/3") nextStep(1, 2);
+            else alert("الباسورد غلط يروحي 😉");
+        }
+
+        function startCelebration() {
+            const items = ['❤️','💖','✨','💝'];
+            for(let i=0; i<100; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.innerHTML = items[i%4]; h.className = 'heart-float';
+                    h.style.left = Math.random() * 100 + '%';
+                    h.style.fontSize = Math.random() * 20 + 20 + 'px';
+                    document.body.appendChild(h);
+                    setTimeout(() => h.remove(), 3000);
+                }, i * 60);
+            }
+        }
+
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
+        function init() {
+            w = window.innerWidth; h = window.innerHeight;
+            canvas.width = w; canvas.height = h;
+            particles = [];
+            for(let i=0; i<80; i++) particles.push({x: Math.random()*w, y: Math.random()*h, r: Math.random()*3+1});
+        }
+        function draw() {
+            ctx.clearRect(0,0,w,h); ctx.fillStyle = "white"; ctx.beginPath();
+            for(let p of particles) { ctx.moveTo(p.x, p.y); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); }
+            ctx.fill();
+            for(let p of particles) { p.y += 1.2; if(p.y > h) p.y = -10; }
+        }
+        init(); setInterval(draw, 30);
+
+        const lightsContainer = document.getElementById('top-lights');
+        for(let i=0; i<15; i++) {
+            const light = document.createElement('div');
+            light.className = 'light';
+            light.style.color = ['#ff0000', '#00ff00', '#ffff00', '#00ffff', '#ff00ff'][i % 5];
+            light.style.backgroundColor = light.style.color;
+            light.style.animationDelay = (i * 0.1) + 's';
+            lightsContainer.appendChild(light);
+        }
+    </script>
+</body>
+</html>
